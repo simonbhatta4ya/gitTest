@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title_head %} welcome - {{ block.super }} {% endblock title_head %}
+
+{% block content %}
+
+<h6>hello wrld</h6>
+<p>↑ ↑ ↑ this will is be used from base.html ↓ ↓ ↓ {% verbatim %} {{ block.super }} {% endverbatim %}</p>
+<h4>{{ block.super }}</h4>
+<p>this is a {{ html_var_ }}</p>
+
+<p>Main web HTMl string title</p>
+<p>this is a {{ html_var_ }}</p>
+<p>random no is : {{ num }}</p>
+
+<p>
+    {% if num is not None %}
+    RANDOM NO : {{ num }}
+    {% endif %}
+</p>
+
+<p>
+    {% if bool_item %}   # if bool_item == True
+    Random No is : {{ num }}
+    {% endif %}
+</p>
+<p>
+    {% for some_item in some_list %}
+    {% if some_item|divisibleby:'2' %}
+        even no :
+    {% endif %}
+    {{ some_item }}<br/>
+    {% endfor %}
+</p>
+<p>some item is : {{ some_list }}</p><br/>
+
+
+{% endblock content %}
