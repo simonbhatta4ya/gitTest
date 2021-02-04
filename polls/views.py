@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 import random
+from django.db.models import Q
+
 
 # Create your views here.
 """
@@ -111,9 +113,84 @@ class HomeView(TemplateView):
 
 
 
+from . models import RestaurantLocation
+
+def restaurant_listview(request):
+    template_name = 'restaurants/restaurants_list.html'
+    queryset = RestaurantLocation.objects.all()
+    context = {
+        #'object_list': [12,14,4132,12]
+        'object_list': queryset
+    }
+    return render(request, template_name, context)
+
+
+
+# class RestaurantListView(ListView):
+#     template_name = 'restaurants/restaurants_list.html'
+#     queryset = RestaurantLocation.objects.all()
 
 
 
 
+# class MexicanRestaurantListView(ListView):
+#     template_name = 'restaurants/restaurants_list.html'
+#     queryset = RestaurantLocation.objects.filter(category__iexact='mexican')
+
+# class AsianFusionRestaurantListView(ListView):
+#     template_name = 'restaurants/restaurants_list.html'
+#     queryset = RestaurantLocation.objects.filter(category__iexact='asian fusion')
 
 
+
+
+# class SearchRestaurantListView(ListView):
+
+#     template_name = 'restaurants/restaurants_list.html'
+    
+#     def get_queryset(self):
+#         #print(self.kwargs)
+#         slug = self.kwargs.get('slug')
+#         if slug:
+#             queryset = RestaurantLocation.objects.filter(
+#                 Q(category__iexact=slug) | Q(category__icontains=slug)
+#                 )
+#         else:
+#             queryset = RestaurantLocation.objects.none()
+#         return queryset
+
+
+
+class RestaurantListView(ListView):
+    #template_name = 'restaurants/restaurants_list.html'
+    # directly uses template from > : D:\algby\ENVYP36\SRC\mysite\polls\templates\polls
+    def get_queryset(self):
+        #print(self.kwargs)
+        slug = self.kwargs.get('slug')
+        if slug:
+            queryset = RestaurantLocation.objects.filter(
+                Q(category__iexact=slug) | Q(category__icontains=slug)
+                )
+        else:
+            queryset = RestaurantLocation.objects.all()
+        return queryset
+
+
+class RestaurantDetailView(DetailView):
+    #template_name = 'restaurants/restaurants_list.html'
+    queryset = RestaurantLocation.objects.all()
+
+    def get_context_data(self, *args, **kwargs):
+        #print(self.kwargs)
+        context = super(RestaurantDetailView, self).get_context_data(*args, **kwargs)
+        #print(context)
+        return context
+    ### for till the abv code
+    ###url(r'^restaurants/(?P<pk>\w+)/$', RestaurantDetailView.as_view()),
+    
+    ### for the below url in URLs.PY
+    ###url(r'^restaurants/(?P<rest_id>\w+)/$', RestaurantDetailView.as_view()),
+    def get_object(self, *args, **kwargs):
+        rest_id = self.kwargs.get('rest_id')
+        obj = get_object_or_404(RestaurantLocation, id=rest_id) #pk = rest_id
+        return obj

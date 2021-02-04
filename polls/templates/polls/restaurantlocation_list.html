@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title_head %} welcome - {{ block.super }} -/ Restaurants Info @around-local {% endblock title_head %}
+
+{% block content %}
+
+
+<h6>reastaurants list view</h6>
+
+
+{% comment %}
+<ul>
+    {% for obj in object_list %}
+    <li>{{ obj }} <br> {{ obj.name }} {{ obj.location }} {{ obj.category }} {{ obj.timestamp }} {{ obj.updated }}</li>
+    {% endfor %}
+</ul>
+{% endcomment %}
+
+
+<ul>
+    {% for obj in object_list %}
+    <li>{{ obj.name }} {{ obj.location }} {{ obj.category }} {{ obj.timestamp }} {{ obj.updated }}</li>
+    {% endfor %}
+</ul>
+{% endblock content %}
+
